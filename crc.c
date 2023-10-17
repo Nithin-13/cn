@@ -1,8 +1,7 @@
 #include<stdio.h>
 #include<string.h>
 char msg[100],g[10],x1[10],rem[10],rcv[100],urcv[100];
-int m,n;
-int j=0,f=-1,k=0;
+int m,n,j=0,f=-1,k=0;
 char xor(char a,char b)
 {
 	if(a==b)
@@ -10,32 +9,42 @@ char xor(char a,char b)
 	else
 	return '1';
 }
-
 void cal(char x2[])
 {
-  	k=0;
-		for(int i=0;i<n;i++)
-		{
-			rem[i]=xor(x1[i],g[i]);
-		}
-		while(rem[k]!='1' && k<=n)
-		{
+  k=0;
+	for(int i=0;i<n;i++)
+	{
+		rem[i]=xor(x1[i],g[i]);
+	}
+	while(rem[k]!='1' && k<=n)
+	{
 			k++;
-		}
+	}
+	int q=0,p=k;
+	while(rem[p]!='\0')
+	{
+		x1[q++]=rem[p++];
+	}
 		
-		
-		int q=0,p=k;
-		
-		
-		while(rem[p]!='\0')
-		{
-			x1[q++]=rem[p++];
-		}
-		
-		for(int r=0;r<k;r++)
-		{
-			x1[q++]=x2[j++];
-		}
+	for(int r=0;r<k;r++)
+	{
+		x1[q++]=x2[j++];
+	}
+}
+
+void crc(char x2[])
+{
+	j=0;
+	for(int i=0;i<n;i++)
+	{
+			x1[i]=x2[j++];
+	}
+	
+	while(x2[j]!='\0')
+	{
+		cal(x2);
+	}
+	cal(x2);	
 }
 void main()
 {
@@ -58,18 +67,7 @@ void main()
 	
 	printf("\nAfter appending zeroes the message : %s\n",msg);
 	
-	for(int i=0;i<n;i++)
-	{
-			x1[i]=msg[j++];
-	}
-	
-	while(msg[j]!='\0')
-	{
-		cal(msg);
-	}
-	
-	
-	cal(msg);
+	crc(msg);
 	
 	printf("\nReminder  is  : %s\n",rem);
 	
@@ -84,19 +82,7 @@ void main()
 	printf("\nEnter the Recieved message : ");
 	scanf("%s",urcv);
 	
-	
-	j=0;
-	for(int i=0;i<n;i++)
-	{
-			x1[i]=urcv[j++];
-	}
-	
-	while(urcv[j]!='\0')
-	{
-		cal(urcv);
-	}
-	cal(urcv);
-	
+	crc(urcv);
 	
 	printf("\nReminder of given msg is : %s\n",rem);
 	
